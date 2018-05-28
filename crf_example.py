@@ -17,17 +17,20 @@ X, y = np.array(X), np.array(y)
 X_train, X_test = X[folds == 1], X[folds != 1]
 y_train, y_test = y[folds == 1], y[folds != 1]
 
-print(y_train)
 # Train linear SVM
 svm = sklearn.svm.LinearSVC(dual=False, C=.1)
 # flatten input
 svm.fit(np.vstack(X_train), np.hstack(y_train))
-
+print(X_train[23].shape)
+print(y_train[23].shape)
+# for data in y_train:
+# print(data)
 # Train linear chain CRF
 model = ChainCRF()
+
 ssvm = FrankWolfeSSVM(model=model, C=.1, max_iter=11)
 ssvm.fit(X_train, y_train)
-
+print(model.n_states)
 print("Test score with chain CRF: %f" % ssvm.score(X_test, y_test))
 
 print("Test score with linear SVM: %f" % svm.score(np.vstack(X_test),

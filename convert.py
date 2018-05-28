@@ -3,12 +3,19 @@ import glob
 import os
 
 
+bilou = 'BILOU'
+
+
 class Token:
-    tag = 'O'
+    # tag = 'O'
+    tag = bilou.find('O')
     cls = '_'
+    content = ''
+    position = 0
 
     def __str__(self):
-        return '<' + str(self.id) + ' ' + self.tag + ' ' + self.cls + '>'
+        return '<' + str(self.id) + ' ' + self.tag + ' ' + self.cls + ' ' + self.content + ' position:' + str(self.position) + '>'
+
 
 
 class Span:
@@ -96,7 +103,7 @@ def set_params_on_spans(span, objs):
 def set_params_on_tokens(token, spans):
     tag = 'O'
     for span in spans:
-        if token.id in span.tokens and span.cls != '_' and token.tag == 'O':
+        if token.id in span.tokens and span.cls != '_' and token.tag == bilou.find('O'):
             token.cls = span.cls
             if span.tag == 'B':
                 if token.id == span.tokens[0]:
@@ -117,28 +124,32 @@ def set_params_on_tokens(token, spans):
                     elif token.id == span.tokens[-1]:
                         tag = 'L'
                     else:
-                        tag = 'I'
+                            tag = 'I'
                 elif len(span.tokens) == 1:
                     tag = 'U'
-    token.tag = tag
+    token.tag = bilou.find(tag)
+    # token.tag = tag
 
 
-def convert_test_dataset():
+def convert_test_dataset(dir):
     text = []
-    os.chdir('testset')
+    sent_vector = []
+    os.chdir(dir)
     files = os.listdir()
     dict_files = list(map(lambda t: os.path.splitext(t)[0], (list(filter(lambda x: x.endswith('.txt'), files)))))
+    # print(len(dict_files))
     for name in dict_files:
         sentences = read_tokens(name)
         spans = read_spans(name)
         objects = read_objects(name)
         for spn in spans:
             set_params_on_spans(spn, objects)
-        print(len(sentences))
+        # print(len(sentences))
+
         for sent in sentences:
-            for tkn in sent:
+            for index, tkn in enumerate(sent):
                 set_params_on_tokens(tkn, spans)
-                print(str(tkn))
+                tkn.position = index
+            text.append(sent)
+    return text
 
-
-convert_test_dataset()
