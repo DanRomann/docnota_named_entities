@@ -2,7 +2,7 @@ from pystruct.models import ChainCRF
 from pystruct.learners import FrankWolfeSSVM
 
 import convert
-from features import features
+from segmentator.features_segmentator import features
 import numpy as np
 
 train_data = convert.convert_test_dataset('testset')

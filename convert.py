@@ -8,6 +8,7 @@ bilou = 'BILOU'
 
 class Token:
     # tag = 'O'
+    id = 0
     tag = bilou.find('O')
     cls = '_'
     content = ''
