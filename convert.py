@@ -6,17 +6,16 @@ import os
 bilou = 'BILOU'
 
 
-class Token:
-    # tag = 'O'
-    id = 0
-    tag = bilou.find('O')
-    cls = '_'
-    content = ''
-    position = 0
-
-    def __str__(self):
-        return '<' + str(self.id) + ' ' + self.tag + ' ' + self.cls + ' ' + self.content + ' position:' + str(self.position) + '>'
-
+# class Token:
+#     # tag = 'O'
+#     id = 0
+#     tag = bilou.find('O')
+#     cls = '_'
+#     content = ''
+#     position = 0
+#
+#     def __str__(self):
+#         return '<' + str(self.id) + ' ' + self.tag + ' ' + self.cls + ' ' + self.content + ' position:' + str(self.position) + '>'
 
 
 class Span:
@@ -43,9 +42,16 @@ def read_tokens(file):
         # print(token.strip())
         if token.strip() != '':
             params = token.strip().split(" ")
-            t = Token()
-            t.id = int(params[0])
-            t.content = params[3]
+            # t = Token()
+            # t.id = int(params[0])
+            # t.content = params[3]
+            t = {
+                'cls': '_',
+                'tag': bilou.find('O'),
+                'id': int(params[0]),
+                'content': params[3],
+                'position': 0
+            }
             tokens.append(t)
 
         else:
@@ -104,31 +110,31 @@ def set_params_on_spans(span, objs):
 def set_params_on_tokens(token, spans):
     tag = 'O'
     for span in spans:
-        if token.id in span.tokens and span.cls != '_' and token.tag == bilou.find('O'):
-            token.cls = span.cls
+        if token['id'] in span.tokens and span.cls != '_' and token['tag'] == bilou.find('O'):
+            token['cls'] = span.cls
             if span.tag == 'B':
-                if token.id == span.tokens[0]:
+                if token['id'] == span.tokens[0]:
                     tag = 'B'
                 else:
                     tag = 'I'
             elif span.tag == 'I':
                 tag = 'I'
             elif span.tag == 'L':
-                if token.id == span.tokens[-1]:
+                if token['id'] == span.tokens[-1]:
                     tag = 'L'
                 else:
                     tag = 'I'
             elif span.tag == 'U':
                 if len(span.tokens) > 1:
-                    if token.id == span.tokens[0]:
+                    if token['id'] == span.tokens[0]:
                         tag = 'B'
-                    elif token.id == span.tokens[-1]:
+                    elif token['id'] == span.tokens[-1]:
                         tag = 'L'
                     else:
                             tag = 'I'
                 elif len(span.tokens) == 1:
                     tag = 'U'
-    token.tag = bilou.find(tag)
+    token['tag'] = bilou.find(tag)
     # token.tag = tag
 
 
@@ -150,7 +156,7 @@ def convert_test_dataset(dir):
         for sent in sentences:
             for index, tkn in enumerate(sent):
                 set_params_on_tokens(tkn, spans)
-                tkn.position = index
+                tkn['position'] = index
             text.append(sent)
     return text
 

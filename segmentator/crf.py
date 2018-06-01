@@ -2,33 +2,65 @@ from pystruct.models import ChainCRF
 from pystruct.learners import FrankWolfeSSVM
 
 import convert
-from segmentator.features_segmentator import features
+
+from segmentator import wordlevel_features
+from segmentator import sentlevel_features
+from segmentator.grammar_features import case_features
+from segmentator.grammar_features import gender_features
+from segmentator.grammar_features import number_features
+from segmentator.grammar_features import pos_features
+
 import numpy as np
 
+import time
+
 train_data = convert.convert_test_dataset('testset')
+
+features = list(set().union(wordlevel_features.features, sentlevel_features.features, case_features.features, gender_features.features, number_features.features, pos_features.features))
 
 
 def word2features(sent):
     f_list = []
-    for i, token in enumerate(sent):
-        feat = [f(token) for f in features]
-        f_list.append(np.array(feat))
-    return f_list
+    start_time = time.time()
+    for token in sent:
+        feat = []
+        for f in features:
+            feat.append(f(token))
+        f_list.append(feat)
+    print(time.time() - start_time)
+    return np.array(f_list)
 
 
 def sent2tag(sent):
-    return [token.tag for token in sent]
+    return [token['tag'] for token in sent]
 
 
 def sent2content(sent):
-    return [token.content for token in sent]
+    return [token['content'] for token in sent]
 
 
-X_Train = np.array([np.array(word2features(sent)) for sent in train_data])
-Y_Train = np.array([np.array(sent2tag(sent)) for sent in train_data])
-print(X_Train[0])
-print(Y_Train[0])
+X_Train = []
+for i, sent in enumerate(train_data[0:100]):
+    X_Train.append(word2features(sent))
+    index = str(i+1) + ' from ' + str(len(train_data))
+    print(index)
+X_Train = np.array(X_Train)
+Y_Train = np.array([np.array(sent2tag(sent)) for sent in train_data[0:100]])
+# X_Train = np.array(word2features(train_data[0]))
+# Y_Train = np.array(sent2tag(train_data[0]))
+# print(X_Train[0])
+# print(Y_Train[0])
 
-model = ChainCRF(n_states=5)
+X_Test = []
+for i, sent in enumerate(train_data[100:200]):
+    X_Test.append(word2features(sent))
+    # index = str(i+1) + ' from ' + str(len(train_data))
+    # print(index)
+X_Test = np.array(X_Test)
+Y_Test = np.array([np.array(sent2tag(sent)) for sent in train_data[100:200]])
+
+model = ChainCRF()
 ssvm = FrankWolfeSSVM(model=model, C=.1, max_iter=10)
 ssvm.fit(X_Train, Y_Train)
+
+print("Test score with chain CRF: %f" % ssvm.score(X_Test, Y_Test))
