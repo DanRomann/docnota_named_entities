@@ -1,6 +1,6 @@
-list = [1,2,3,4,5]
+import pymorphy2
 
-if 7 in list:
-    print('YES')
-else:
-    print('NO')
+morph = pymorphy2.MorphAnalyzer()
+
+analyze = morph.parse('Украина')
+print(analyze)

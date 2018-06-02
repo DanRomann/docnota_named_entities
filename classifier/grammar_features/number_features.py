@@ -6,13 +6,11 @@ morph = pymorphy2.MorphAnalyzer()
 
 # Единственное
 def is_sing(m):
-    
     return True if m['morph'].tag.number == 'sing' else False
 
 
 # Множественное
 def is_plur(m):
-    
     return True if m['morph'].tag.number == 'plur' else False
 
 

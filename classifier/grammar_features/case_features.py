@@ -2,7 +2,7 @@
 
 
 # Именительный падеж
-def is_nomn(m):
+def is_noun(m):
     return True if m['morph'].tag.case == 'nomn' else False
 
 
@@ -51,4 +51,4 @@ def is_loc2(m):
     return True if m['morph'].tag.case == 'loc2' else False
 
 
-features = [is_ablt, is_acc2, is_accs, is_datv, is_gen2, is_gent, is_loc2, is_loct, is_nomn, is_voct]
+features = [is_ablt, is_acc2, is_accs, is_datv, is_gen2, is_gent, is_loc2, is_loct, is_noun, is_voct]

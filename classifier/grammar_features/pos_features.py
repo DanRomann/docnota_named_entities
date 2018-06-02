@@ -1,3 +1,7 @@
+import pymorphy2
+
+# анализатор слов
+morph = pymorphy2.MorphAnalyzer()
 
 
 # TODO Грамматические признаки
