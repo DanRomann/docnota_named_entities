@@ -24,11 +24,12 @@ def text_to_sentences(text):
         res.append(text[:sear.end()])
         text = text[sear.end():]
         sear = regex.search(text)
-    res.append(text)
+    if len(text) != '':
+        res.append(text)
     return res
 
 
-def sentence_to_tokens(sent):
+def sentence_to_tokens(sent, sent_id):
     STRING = 1
     return list({
                     'content': token[STRING],
@@ -40,6 +41,7 @@ def sentence_to_tokens(sent):
 
 def process(text):
     text_tokens = [sentence_to_tokens(sent) for sent in text_to_sentences(text)]
+    print(text_tokens)
     for sent in text_tokens:
         val = process_model(sent)
         for i, t in enumerate(sent):
