@@ -44,6 +44,7 @@ max_word_len = max([len(y_) for y_ in y_test[selected]])
 fig, axes = plt.subplots(n_words, max_word_len, figsize=(10, 10))
 fig.subplots_adjust(wspace=0)
 for ind, axes_row in zip(selected, axes):
+    print(X_test[ind].shape)
     y_pred_svm = svm.predict(X_test[ind])
     y_pred_chain = ssvm.predict([X_test[ind]])[0]
     for i, (a, image, y_true, y_svm, y_chain) in enumerate(

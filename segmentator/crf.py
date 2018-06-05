@@ -16,7 +16,6 @@ import time
 
 import pymorphy2
 
-train_data = convert.convert_test_dataset('testset')
 
 features = list(set().union(wordlevel_features.features, sentlevel_features.features, case_features.features, gender_features.features, number_features.features, pos_features.features))
 
@@ -48,28 +47,39 @@ def sent2content(sent):
     return [token['content'] for token in sent]
 
 
-X_Train = []
-for i, sent in enumerate(train_data):
-    X_Train.append(word2features(sent))
-    index = str(i+1) + ' from ' + str(len(train_data))
-    print(index)
-X_Train = np.array(X_Train)
-Y_Train = np.array([np.array(sent2tag(sent)) for sent in train_data])
-# X_Train = np.array(word2features(train_data[0]))
-# Y_Train = np.array(sent2tag(train_data[0]))
-# print(X_Train[0])
-# print(Y_Train[0])
-
-X_Test = []
-for i, sent in enumerate(train_data):
-    X_Test.append(word2features(sent))
-    # index = str(i+1) + ' from ' + str(len(train_data))
-    # print(index)
-X_Test = np.array(X_Test)
-Y_Test = np.array([np.array(sent2tag(sent)) for sent in train_data])
+# X_Test = []
+# for i, sent in enumerate(train_data):
+#     X_Test.append(word2features(sent))
+#     # index = str(i+1) + ' from ' + str(len(train_data))
+#     # print(index)
+# X_Test = np.array(X_Test)
+# Y_Test = np.array([np.array(sent2tag(sent)) for sent in train_data])
 
 model = ChainCRF()
 ssvm = FrankWolfeSSVM(model=model, C=.1, max_iter=10)
-ssvm.fit(X_Train, Y_Train)
 
-print("Test score with chain CRF: %f" % ssvm.score(X_Test, Y_Test))
+
+def train_model(dir, x_test=None, y_test=None):
+    train_data = convert.convert_test_dataset(dir)
+    x__train = []
+    for i, sent in enumerate(train_data):
+        x__train.append(word2features(sent))
+        index = str(i + 1) + ' from ' + str(len(train_data))
+        print(index)
+    x__train = np.array(x__train)
+    y__train = np.array([np.array(sent2tag(sent)) for sent in train_data])
+    ssvm.fit(x__train, y__train)
+    if x_test is not None and y_test is not None:
+        print("Test score with chain CRF: %f" % ssvm.score(x_test, y_test))
+
+
+def process_model(tokens):
+
+    x__data = np.array([word2features(tokens)])
+    print(x__data.shape[1])
+    print(model.n_features)
+    print(tokens)
+    y__data = ssvm.predict(x__data)[0]
+    print(y__data)
+    return y__data
+
