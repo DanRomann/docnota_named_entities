@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block title %}
+    <title>Список документов</title>
+{% endblock %}
+
+{% block content %}
+    {% for doc in docs %}
+        <a href="/doc/{{doc.doc_id}}">{{doc.name}}</a>
+        <br>
+    {% endfor %}
+    <form action="" method="post">
+        <h3>Новый документ</h3>
+        <p>Название <input type="text" name="name"></p>
+        <input type="submit" value="Создать">
+    </form>
+{% endblock %}

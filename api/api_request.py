@@ -51,8 +51,9 @@ def doc_list():
     }
     path = api['address'] + api['port'] + '/user/docs'
     r = requests.get(path, headers=header)
-    print(r.json())
+    # print(r.json())
     result = r.json()
+    return result
 
 
 # вывод документа
@@ -67,6 +68,7 @@ def get_doc(doc_id):
     r = requests.get(path, headers=header)
     print(r.json())
     result = r.json()
+    return result
 
 
 # добавить новый блок
@@ -91,4 +93,3 @@ def insert_block(doc_id, title, content, ord):
 
 
 authorization()
-

@@ -59,8 +59,8 @@ model = ChainCRF()
 ssvm = FrankWolfeSSVM(model=model, C=.1, max_iter=10)
 
 
-def train_model(dir, x_test=None, y_test=None):
-    train_data = convert.convert_test_dataset(dir)
+def train_model(files, x_test=None, y_test=None):
+    train_data = convert.convert_test_dataset(files)
     x__train = []
     for i, sent in enumerate(train_data):
         x__train.append(word2features(sent))

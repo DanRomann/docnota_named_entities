@@ -1,0 +1,14 @@
+.Person{
+    background-color: blue;
+    color: white;
+}
+
+.Location{
+    background-color: green;
+    color: white;
+}
+
+.Org{
+    background-color: red;
+    color: white;
+}

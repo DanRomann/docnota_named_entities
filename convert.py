@@ -138,11 +138,11 @@ def set_params_on_tokens(token, spans):
     # token.tag = tag
 
 
-def convert_test_dataset(dir):
+def convert_test_dataset(files):
     text = []
     sent_vector = []
-    os.chdir(dir)
-    files = os.listdir()
+    # os.chdir(dir)
+    # files = os.listdir()
     dict_files = list(map(lambda t: os.path.splitext(t)[0], (list(filter(lambda x: x.endswith('.txt'), files)))))
     # print(len(dict_files))
     for name in dict_files:

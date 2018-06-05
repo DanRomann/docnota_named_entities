@@ -26,7 +26,7 @@ def text_to_sentences(text):
         sear = regex.search(text)
     if len(text) != '':
         res.append(text)
-    return res
+    return res[:-1]
 
 
 def sentence_to_tokens(sent, sent_id):
@@ -40,7 +40,7 @@ def sentence_to_tokens(sent, sent_id):
 
 
 def process(text):
-    text_tokens = [sentence_to_tokens(sent) for sent in text_to_sentences(text)]
+    text_tokens = [sentence_to_tokens(sent, i) for i, sent in enumerate(text_to_sentences(text))]
     print(text_tokens)
     for sent in text_tokens:
         val = process_model(sent)
@@ -49,5 +49,5 @@ def process(text):
     return text_tokens
 
 
-train_model('../testset')
-print(process('Я сегодня, очень хорошо, отлично хорощоооо покушал! А еще кажется Владимир Владимирович сделал тоже самое.'))
+# train_model('../testset')
+# print(process('Я сегодня, очень хорошо, отлично хорощоооо покушал! А еще кажется Владимир Владимирович сделал тоже самое.'))

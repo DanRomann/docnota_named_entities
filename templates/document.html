@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% block title %}
+    <title>{{doc.name}}</title>
+{% endblock %}
+
+{% block content %}
+    <h1>{{doc.name}}</h1>
+    {% for block in doc.blocks %}
+        <h2>{{block.name}}</h2>
+        <div class="content">
+        {{block.content| safe}}
+            </div>
+    {% endfor %}
+    <form action="" method="post">
+        <h3>Добавить новый блок</h3>
+        <p>Название нового блока <input type="text" name="name"></p>
+        <p>Содержание: <br>
+            <textarea name="content" id="" cols="30" rows="10"></textarea>
+        </p>
+        <input type="submit" value="Добавить">
+    </form>
+{% endblock %}

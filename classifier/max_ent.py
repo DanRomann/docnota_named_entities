@@ -69,8 +69,8 @@ def init_entities(sent, sent_id=-1):
     return entities
 
 
-def train_model(dir):
-    dataset = convert_test_dataset(dir)
+def train_model(files):
+    dataset = convert_test_dataset(files)
 
     # test_entities = [init_entities(sent) for sent in dataset]
     test_entities = [entity for sent in dataset for entity in init_entities(sent)]
