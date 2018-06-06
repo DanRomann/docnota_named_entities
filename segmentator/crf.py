@@ -69,8 +69,7 @@ def train_model(files, x_test=None, y_test=None):
     x__train = np.array(x__train)
     y__train = np.array([np.array(sent2tag(sent)) for sent in train_data])
     ssvm.fit(x__train, y__train)
-    if x_test is not None and y_test is not None:
-        print("Test score with chain CRF: %f" % ssvm.score(x_test, y_test))
+    print("Test score with chain CRF: %f" % ssvm.score(x__train, y__train))
 
 
 def process_model(tokens):

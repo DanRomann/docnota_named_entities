@@ -16,6 +16,7 @@ def is_adjs(m):
     return True if m['morph'].tag.POS == 'ADJS' else False
 
 
+
 # Компаратив
 def is_comp(m):
     return True if m['morph'].tag.POS == 'COMP' else False

@@ -4,13 +4,21 @@
 {% endblock %}
 
 {% block content %}
+<div class="container">
+<div class="list-group">
+    <div class="row">
+
     {% for doc in docs %}
-        <a href="/doc/{{doc.doc_id}}">{{doc.name}}</a>
+        <a href="/doc/{{doc.doc_id}}" class="list-group-item list-group-item-action">{{doc.name}}</a>
         <br>
     {% endfor %}
+    </div>
+    </div>
+
     <form action="" method="post">
         <h3>Новый документ</h3>
         <p>Название <input type="text" name="name"></p>
         <input type="submit" value="Создать">
     </form>
+    </div>
 {% endblock %}

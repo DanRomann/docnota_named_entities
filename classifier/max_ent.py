@@ -86,6 +86,7 @@ def train_model(files):
     # print(test_cls[0])
 
     classifier.fit(test_features, test_cls)
+    print("Test score with Max-ent: %f" % classifier.score(test_features, test_cls))
 
 
 def process_model(text):
